@@ -1,0 +1,57 @@
+cases:
+  - id: P01
+    group: policy
+    user: anna
+    question: How quickly do we have to notify the supervisory authority about a breach?
+    relevant: {title_prefix: ["Incident protocol"]}
+    facts: ["72 hours"]
+    reference: The supervisory authority must be notified within 72 hours.
+  - id: P02
+    group: policy
+    user: ben
+    question: Who must be told first when a data breach is suspected?
+    relevant: {title_prefix: ["Incident protocol"]}
+    facts: [["data protection officer", "DPO"], "2 hours"]
+    reference: The data protection officer, within 2 hours.
+  - id: P03
+    group: policy
+    user: anna
+    question: How much mileage is reimbursed per kilometre?
+    relevant: {ids: [pol-2]}
+    facts: ["0.30 EUR"]
+    reference: Mileage is reimbursed at 0.30 EUR per kilometre.
+  - id: P04
+    group: policy
+    user: ben
+    question: May I process client data on my private laptop when working remotely?
+    relevant: {title_prefix: ["Remote work policy"]}
+    facts: ["prohibited"]
+    reference: No. Client data may only be processed on company devices; private devices are prohibited.
+  - id: C01
+    group: contract
+    user: anna
+    question: When is payment due under the Acme service agreement?
+    relevant: {metadata: {tenant: acme}}
+    facts: ["30 days"]
+    reference: Payment is due within 30 days of invoice.
+  - id: C02
+    group: contract
+    user: ben
+    question: What is the payment term in the Globex purchase agreement?
+    relevant: {metadata: {tenant: globex}}
+    facts: ["14 days"]
+    reference: Payment is due within 14 days.
+  - id: X01
+    group: acl
+    user: ben
+    question: What liability limit is in the Acme service agreement?
+    relevant: {}
+    forbidden_metadata: {tenant: [acme]}
+    forbidden_terms: ["gross negligence"]
+    reference: I have no information on that.
+  - id: U01
+    group: unanswerable
+    user: anna
+    question: What is the parental leave policy?
+    relevant: {}
+    reference: I have no information on that.

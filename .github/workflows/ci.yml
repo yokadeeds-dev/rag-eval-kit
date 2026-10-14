@@ -1,0 +1,24 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+      - run: pytest -q
+      - name: Retrieval gate on the toy example
+        run: |
+          rag-eval retrieval --system examples.toy_rag.system:make --cases examples/toy_rag/golden.yaml
+          ! rag-eval retrieval --system examples.toy_rag.system:make_truncating --cases examples/toy_rag/golden.yaml --baseline examples/toy_rag/baseline.json
