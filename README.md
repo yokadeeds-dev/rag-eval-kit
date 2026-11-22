@@ -4,6 +4,18 @@ Evaluate a RAG system **through its real code path**: a free, deterministic retr
 
 Extracted from a real evaluation of a legal RAG assistant, where it found that the retriever was perfect but the LLM never saw 22 % of the required facts ([case study](https://github.com/yokadeeds-dev/EVL/blob/main/03_Prototyp/backend/eval/RESULTS.md)).
 
+## Case study: what it found in EVL
+
+25 golden questions on a multi-tenant legal assistant (FastAPI, pgvector, Claude), synthetic corpus, total evaluation cost ≈ $5.75.
+
+| Finding | Fix | Effect |
+|---|---|---|
+| Context cut after 200 characters — right documents retrieved, 22 % of required facts never reached the LLM | pass the whole document | facts in answer 0.91 → **1.00**, faithfulness (RAGAS) 0.34 → **0.61** |
+| More context made the model answer a question about a *blocked* client with the user's *own* client's contracts (wrong answer, no leak) | shared grounding rule in all prompts | abstention on blocked knowledge 0.40 → **1.00** |
+| Phone numbers like `+49 170 …` slipped past the PII filter | regex fix, found by the red-team suite | 9/9 red-team checks pass |
+
+Open by design: ~40 % of statements are not directly backed by the context — a template asks for more than the sources hold; a product decision, measured but not changed. Limits (25 cases, synthetic data, judge from the same model family) are listed in the [full results](https://github.com/yokadeeds-dev/EVL/blob/main/03_Prototyp/backend/eval/RESULTS.md).
+
 ## Why another eval kit
 
 Four things that went wrong with off-the-shelf tooling, and what this kit does instead:
